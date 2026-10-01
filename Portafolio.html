@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#130c13">
+  <meta name="description" content="Automatización con IA para ecommerce. Tiendas online, sistemas de pedidos y asistentes para WhatsApp que mantienen tu negocio en movimiento.">
+  <title>Juan Felipe Rentería — Automatización IA para ecommerce</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='20' fill='%23ff465e'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='27' font-weight='700' fill='white'%3EJF%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #130c13;
+      --bg-soft: #1d111a;
+      --paper: #fff8f6;
+      --muted: #baaeb6;
+      --line: rgba(255, 255, 255, .12);
+      --glass: rgba(255, 255, 255, .065);
+      --glass-strong: rgba(255, 255, 255, .105);
+      --red: #ff465e;
+      --red-light: #ff7180;
+      --orange: #ff8a61;
+      --green: #63e0aa;
+      --radius: 24px;
+      --width: 1160px;
+    }
+
+    * { box-sizing: border-box; }
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 92px;
+      overflow-x: hidden;              /* respaldo para navegadores antiguos */
+    }
+    @supports (overflow: clip) {
+      html { overflow-x: clip; }
+    }
+    body {
+      margin: 0;
+      min-width: 320px;
+      max-width: 100%;
+      background:
+        radial-gradient(ellipse at 89% 7%, rgba(117, 25, 67, .28), transparent 32rem),
+        radial-gradient(ellipse at 4% 45%, rgba(129, 22, 42, .16), transparent 34rem),
+        var(--bg);
+      color: var(--paper);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+      overflow-x: clip;
+      overscroll-behavior-x: none;
+    }
+    body::before {
+      position: fixed;
+      z-index: -1;
+      inset: 0;
+      pointer-events: none;
+      content: "";
+      opacity: .12;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+    }
+    a { color: inherit; text-decoration: none; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button:focus-visible, a:focus-visible { outline: 2px solid var(--red-light); outline-offset: 4px; }
+    .wrap { width: min(var(--width), calc(100% - 48px)); margin-inline: auto; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: #ff9ba4;
+      font-size: .75rem;
+      font-weight: 750;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { width: 7px; height: 7px; border-radius: 50%; background: var(--red); box-shadow: 0 0 15px var(--red); content: ""; }
+    .serif { font-family: Georgia, "Times New Roman", serif; letter-spacing: -.045em; }
+    .muted { color: var(--muted); }
+    .link-arrow { color: #ff8d9b; }
+    .glass {
+      border: 1px solid rgba(255,255,255,.14);
+      background: linear-gradient(145deg, rgba(255,255,255,.105), rgba(255,255,255,.035) 48%, rgba(255,255,255,.055));
+      box-shadow: inset 0 1px rgba(255,255,255,.12), 0 22px 70px rgba(0,0,0,.22);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+    }
+
+    .site-header { position: sticky; z-index: 20; top: 0; border-bottom: 1px solid rgba(255,255,255,.075); background: rgba(19,12,19,.72); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+    .nav { display: flex; min-height: 78px; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: inline-flex; min-width: max-content; align-items: center; gap: 12px; }
+    .brand-mark { display: grid; width: 39px; height: 39px; place-items: center; border: 1px solid rgba(255,255,255,.26); border-radius: 14px; background: linear-gradient(145deg, #ff6373, #d92549 72%); box-shadow: 0 7px 24px rgba(255,55,83,.22), inset 0 1px rgba(255,255,255,.45); font-family: Georgia, serif; font-size: .8rem; font-weight: 700; letter-spacing: -.08em; }
+    .brand-copy { display: grid; line-height: 1.15; }
+    .brand-copy strong { font-size: .88rem; letter-spacing: -.02em; }
+    .brand-copy small { margin-top: 4px; color: var(--muted); font-size: .65rem; letter-spacing: .09em; text-transform: uppercase; }
+    .nav-links { display: flex; align-items: center; gap: clamp(17px, 3vw, 38px); color: #d0c4cc; font-size: .82rem; }
+    .nav-links a { transition: color .2s ease; }
+    .nav-links a:hover { color: white; }
+    .button {
+      display: inline-flex;
+      min-height: 48px;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 0 19px;
+      border: 1px solid rgba(255,255,255,.24);
+      border-radius: 999px;
+      background: linear-gradient(110deg, #ff586a, #ff765f 75%, #ff9060);
+      box-shadow: 0 10px 30px rgba(255,65,89,.24), inset 0 1px rgba(255,255,255,.38);
+      color: #fff;
+      font-size: .84rem;
+      font-weight: 750;
+      transition: transform .2s ease, filter .2s ease, box-shadow .2s ease;
+    }
+    .button:hover { transform: translateY(-2px); filter: saturate(1.12); box-shadow: 0 15px 34px rgba(255,65,89,.32), inset 0 1px rgba(255,255,255,.42); }
+    .button svg { width: 17px; height: 17px; }
+    .button.secondary { border-color: var(--line); background: rgba(255,255,255,.055); box-shadow: inset 0 1px rgba(255,255,255,.08); color: #f4e8ed; }
+    .button.secondary:hover { background: rgba(255,255,255,.1); }
+
+    .hero { position: relative; overflow-x: clip; padding: clamp(48px, 9vw, 86px) 0 clamp(56px, 10vw, 100px); }
+    .hero::after { position: absolute; z-index: -1; top: 14%; right: -18%; width: 58vw; max-width: 780px; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(255,50,83,.13), rgba(143,24,68,.06) 38%, transparent 69%); filter: blur(20px); content: ""; }
+    .hero-grid { display: grid; align-items: center; grid-template-columns: 1.06fr .94fr; gap: 5.5vw; }
+    .hero-copy { position: relative; z-index: 2; padding: 24px 0 35px; }
+    .hero h1 { max-width: 710px; margin: 20px 0 22px; font-size: clamp(3.5rem, 7.25vw, 6.4rem); font-weight: 500; line-height: .98; }
+    .hero h1 .accent { color: transparent; background: linear-gradient(105deg, #ff7b7e 4%, #ff475f 52%, #ff9867 100%); background-clip: text; -webkit-background-clip: text; }
+    .hero-lead { max-width: 610px; margin: 0; color: #d3c6cd; font-size: clamp(1.02rem, 1.45vw, 1.18rem); line-height: 1.75; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 31px; }
+    .hero-points { display: flex; flex-wrap: wrap; gap: 11px 22px; margin-top: 29px; color: #dacbd2; font-size: .78rem; }
+    .hero-points span { display: inline-flex; align-items: center; gap: 8px; }
+    .check { display: inline-grid; width: 18px; height: 18px; place-items: center; border: 1px solid rgba(99,224,170,.34); border-radius: 50%; background: rgba(99,224,170,.1); color: var(--green); font-size: .7rem; }
+
+    .visual-wrap { position: relative; max-width: 100%; min-height: 420px; display: grid; place-items: center; }
+    .orb { position: absolute; top: 8%; right: 1%; width: 360px; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 34% 28%, rgba(255,139,119,.74), rgba(238,40,81,.45) 28%, rgba(142,17,66,.21) 55%, transparent 74%); filter: blur(3px); opacity: .64; }
+    .orb::before, .orb::after { position: absolute; inset: 9%; border: 1px solid rgba(255,255,255,.14); border-radius: 43% 57% 65% 35% / 39% 38% 62% 61%; transform: rotate(32deg); content: ""; }
+    .orb::after { inset: 17%; transform: rotate(-31deg); }
+    .float-tag { position: absolute; z-index: 3; display: flex; align-items: center; gap: 10px; padding: 12px 15px; border-radius: 17px; color: #f9edf1; font-size: .75rem; }
+    .float-tag.top { top: 7%; right: -1%; }
+    .float-tag.bottom { bottom: 9%; left: -3%; }
+    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 13px rgba(99,224,170,.86); }
+    .tag-icon { display: grid; width: 28px; height: 28px; place-items: center; border-radius: 10px; background: rgba(255,255,255,.1); color: #ff9aa5; }
+    .tag-icon svg { width: 15px; height: 15px; }
+    .phone-card { position: relative; z-index: 2; width: min(100%, 420px); padding: 18px; border-radius: 30px; transform: rotate(-2deg); }
+    .phone-top { display: flex; align-items: center; justify-content: space-between; padding: 1px 2px 15px; border-bottom: 1px solid rgba(255,255,255,.1); }
+    .phone-person { display: flex; align-items: center; gap: 10px; }
+    .avatar { display: grid; width: 35px; height: 35px; place-items: center; border-radius: 13px; background: linear-gradient(135deg, #ff8391, #a91545); color: white; font-family: Georgia,serif; font-size: .8rem; }
+    .phone-person b, .phone-person small { display: block; }
+    .phone-person b { font-size: .78rem; }
+    .phone-person small { color: #aa9da6; font-size: .64rem; }
+    .phone-dots { color: #b4a5ae; letter-spacing: .11em; }
+    .flow-label { display: flex; align-items: center; gap: 8px; margin: 16px 0 12px; color: #cfc1c9; font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .flow-label::before { width: 20px; height: 1px; background: var(--red); content: ""; }
+    .chat { display: grid; gap: 10px; }
+    .bubble { max-width: 87%; padding: 11px 13px; border: 1px solid rgba(255,255,255,.09); border-radius: 16px 16px 16px 5px; background: rgba(255,255,255,.075); color: #eee2e8; font-size: .75rem; line-height: 1.5; }
+    .bubble.outgoing { justify-self: end; border-color: rgba(255,84,109,.2); border-radius: 16px 16px 5px 16px; background: linear-gradient(130deg, rgba(255,72,97,.23), rgba(166,25,62,.2)); }
+    .product-mini { display: flex; align-items: center; gap: 12px; margin-top: 12px; padding: 11px; border: 1px solid rgba(255,255,255,.1); border-radius: 15px; background: rgba(255,255,255,.045); }
+    .product-art { display: grid; width: 52px; height: 52px; flex: 0 0 52px; place-items: center; border-radius: 13px; background: radial-gradient(circle at 70% 25%, #ffac93, #d43c5b 55%, #612139); color: #fff0ec; }
+    .product-art svg { width: 25px; height: 25px; }
+    .product-copy { min-width: 0; flex: 1; }
+    .product-copy strong, .product-copy small { display: block; }
+    .product-copy strong { font-size: .72rem; }
+    .product-copy small { margin-top: 3px; color: #c5b5bd; font-size: .65rem; }
+    .product-price { color: #ffa3a8; font-size: .69rem; font-weight: 750; white-space: nowrap; }
+    .automation-state { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 13px; padding: 11px 12px; border: 1px solid rgba(99,224,170,.16); border-radius: 14px; background: rgba(46,142,105,.095); }
+    .automation-state span { display: inline-flex; align-items: center; gap: 8px; color: #d4e9df; font-size: .68rem; }
+    .automation-state b { color: #8deab9; font-size: .63rem; font-weight: 650; }
+    .phone-caption { margin: 12px 5px 0; color: #9d8d97; font-size: .64rem; text-align: center; }
+
+    .trust-strip { border-block: 1px solid rgba(255,255,255,.075); background: rgba(255,255,255,.018); }
+    .trust-inner { display: grid; grid-template-columns: repeat(3, 1fr); padding: 22px 0; }
+    .trust-item { display: flex; min-height: 44px; align-items: center; justify-content: center; gap: 12px; padding: 0 15px; color: #e8dbe1; font-size: .8rem; text-align: center; }
+    .trust-item + .trust-item { border-left: 1px solid var(--line); }
+    .trust-item svg { width: 19px; height: 19px; flex: 0 0 19px; color: #ff7786; }
+
+    section.content-section { padding: clamp(56px, 9vw, 106px) 0; }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-bottom: 38px; }
+    .section-heading > div { max-width: 670px; }
+    .section-heading h2 { margin: 12px 0 12px; font-size: clamp(2.3rem, 4.2vw, 3.7rem); font-weight: 500; line-height: 1.08; }
+    .section-heading p { max-width: 610px; margin: 0; color: var(--muted); font-size: .98rem; }
+    .section-note { max-width: 245px; padding: 13px 16px; border-left: 2px solid var(--red); color: #d8c8d0; font-size: .78rem; line-height: 1.5; }
+
+    .service-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; align-items: stretch; }
+    .service-card { position: relative; display: flex; height: 100%; flex-direction: column; overflow: hidden; padding: 27px; border-radius: var(--radius); transition: transform .25s ease, border-color .25s ease, background .25s ease; }
+    .service-card:hover { transform: translateY(-4px); border-color: rgba(255,107,126,.35); background-color: rgba(255,255,255,.08); }
+    .service-card::after { position: absolute; right: -75px; bottom: -125px; width: 230px; height: 230px; border-radius: 50%; background: radial-gradient(circle, rgba(255,60,88,.12), transparent 68%); content: ""; pointer-events: none; }
+    .service-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; }
+    .service-icon { display: grid; width: 43px; height: 43px; place-items: center; border: 1px solid rgba(255,106,126,.24); border-radius: 15px; background: rgba(255,75,98,.1); color: #ff8b99; }
+    .service-icon svg { width: 20px; height: 20px; }
+    .price { padding: 8px 12px; border: 1px solid rgba(255,104,123,.22); border-radius: 999px; background: rgba(206,35,69,.14); color: #ffb2ba; font-size: .76rem; font-weight: 750; white-space: nowrap; }
+    .service-card h3 { margin: 19px 0 9px; font-size: 1.28rem; font-weight: 650; letter-spacing: -.03em; }
+    .service-card p { margin: 0 0 17px; color: #bcaeb7; font-size: .84rem; }
+    .service-card ul { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; color: #e3d7dd; font-size: .8rem; }
+    .service-card li { display: flex; gap: 9px; }
+    .service-card li::before { margin-top: .52em; width: 5px; height: 5px; flex: 0 0 5px; border-radius: 50%; background: #ff7484; content: ""; }
+    .service-card .card-cta { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 21px; color: #ff9ba5; font-size: .78rem; font-weight: 700; }
+    .card-cta svg { width: 14px; height: 14px; transition: transform .2s ease; }
+    .card-cta:hover svg { transform: translateX(3px); }
+    .service-card.featured { border-color: rgba(255,89,111,.29); background: linear-gradient(145deg, rgba(255,79,103,.105), rgba(255,255,255,.045) 48%, rgba(255,255,255,.055)); }
+
+    .plans-section { position: relative; overflow: hidden; background: linear-gradient(180deg, transparent, rgba(88,18,41,.17) 42%, transparent); }
+    .plans-section::before { position: absolute; top: 12%; left: -13%; width: 400px; height: 400px; border-radius: 50%; background: rgba(200,23,66,.08); filter: blur(80px); content: ""; }
+    .plans-grid { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 15px; align-items: stretch; }
+    .plan-card { position: relative; display: flex; height: 100%; flex-direction: column; padding: 26px 23px; border-radius: 23px; }
+    .plan-card:nth-child(1) { border-top: 2px solid #66dcef; }
+    .plan-card:nth-child(2) { border-top: 2px solid #ffa270; }
+    .plan-card:nth-child(3) { border-top: 2px solid #ff5c7c; }
+    .plan-card h3 { margin: 4px 0 7px; font-size: 1.08rem; letter-spacing: -.025em; }
+    .plan-price { margin-bottom: 19px; color: #ff9aa5; font-size: 1rem; font-weight: 750; }
+    .plan-price small { color: #bbaeb6; font-size: .7rem; font-weight: 550; }
+    .plan-card ul { display: grid; gap: 11px; margin: 0; padding: 0; list-style: none; color: #d8cbd1; font-size: .79rem; }
+    .plan-card li { display: flex; gap: 9px; }
+    .plan-card li::before { content: "+"; color: var(--red-light); font-size: .9rem; font-weight: 700; line-height: 1.4; }
+    .plan-card .button { width: 100%; margin-top: 23px; }
+    .plans-foot { position: relative; margin: 18px 0 0; color: #94858e; font-size: .73rem; text-align: center; }
+
+    .process-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; margin-top: 40px; align-items: stretch; }
+    .step-card { position: relative; display: flex; height: 100%; flex-direction: column; padding: 23px 21px; border-radius: 21px; }
+    .step-number { display: grid; width: 36px; height: 36px; place-items: center; border: 1px solid rgba(255,255,255,.17); border-radius: 50%; background: linear-gradient(145deg, rgba(255,103,123,.25), rgba(188,29,63,.2)); color: #ffa3ac; font-family: Georgia,serif; font-size: 1rem; }
+    .step-card h3 { margin: 18px 0 7px; font-size: 1rem; }
+    .step-card p { margin: 0; color: #bcaeb7; font-size: .79rem; line-height: 1.65; }
+    .process-note { display: flex; align-items: center; gap: 14px; margin-top: 16px; padding: 17px 20px; border-radius: 18px; color: #ded0d7; font-size: .83rem; }
+    .process-note svg { width: 19px; height: 19px; flex: 0 0 19px; color: var(--green); }
+
+    .contact-section { padding: clamp(24px, 4vw, 42px) 0 clamp(60px, 9vw, 92px) !important; }
+    .contact-panel { position: relative; display: grid; align-items: center; grid-template-columns: 1fr auto; gap: 35px; overflow: hidden; padding: clamp(28px, 4vw, 48px) clamp(22px, 5vw, 55px); border-radius: 31px; }
+    .contact-panel::before { position: absolute; top: -195px; right: 10%; width: 440px; height: 440px; border-radius: 50%; background: radial-gradient(circle at 40% 40%, rgba(255,114,123,.29), rgba(201,27,66,.14) 38%, transparent 68%); content: ""; }
+    .contact-panel > * { position: relative; }
+    .contact-panel h2 { max-width: 650px; margin: 13px 0 12px; font-size: clamp(2.45rem, 4.8vw, 4.35rem); font-weight: 500; line-height: 1.02; }
+    .contact-panel p { max-width: 520px; margin: 0; color: #c7b8c0; font-size: .98rem; }
+    .contact-actions { display: grid; justify-items: start; gap: 11px; }
+    .contact-number { color: #c9b9c1; font-size: .83rem; letter-spacing: .04em; }
+    .site-footer { padding: 22px 0 29px; border-top: 1px solid rgba(255,255,255,.08); }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; color: #a899a2; font-size: .73rem; }
+    .footer-brand { display: flex; align-items: center; gap: 10px; color: #e7dce2; font-size: .77rem; font-weight: 650; }
+    .footer-brand .brand-mark { width: 29px; height: 29px; border-radius: 10px; font-size: .65rem; }
+    .footer-link { color: #eab6bd; }
+
+    @media (min-width: 1440px) {
+      :root { --width: 1280px; }
+    }
+    @media (max-width: 1040px) {
+      .service-grid { grid-template-columns: 1fr; }
+      .plans-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .plans-grid .plan-card:nth-child(3) { grid-column: 1 / -1; }
+      .process-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+    @media (max-width: 900px) {
+      .nav-links { gap: 18px; }
+      .hero-grid { grid-template-columns: 1fr .9fr; gap: 1.5vw; }
+      .hero h1 { font-size: clamp(3.2rem, 7vw, 5rem); }
+      .visual-wrap { min-height: 380px; }
+      .phone-card { padding: 15px; }
+      .float-tag.top { right: -5%; }
+      .float-tag.bottom { left: -8%; }
+    }
+    @media (max-width: 700px) {
+      html { scroll-padding-top: 116px; }
+      .wrap { width: min(var(--width), calc(100% - 34px)); }
+      .nav { display: grid; min-height: 0; grid-template-columns: minmax(0,1fr) auto; gap: 7px 12px; padding: 10px 0 7px; }
+      .brand { min-width: 0; }
+      .brand-copy { min-width: 0; }
+      .brand-copy strong { font-size: .78rem; }
+      .brand-copy small { font-size: .58rem; }
+      .brand-mark { width: 35px; height: 35px; }
+      .nav-links { position: static; grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0,.95fr) minmax(0,.7fr) minmax(0,1.35fr); gap: 4px; padding: 0; border: 0; background: transparent; font-size: .74rem; }
+      .nav-links a { display: flex; min-width: 0; min-height: 44px; align-items: center; justify-content: center; padding: 5px 3px; border: 1px solid rgba(255,255,255,.06); border-radius: 13px; background: rgba(255,255,255,.035); line-height: 1.2; text-align: center; }
+      .nav > .button { min-height: 44px; padding: 0 13px; font-size: .74rem; }
+      .nav > .button svg { width: 15px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 25px; }
+      .hero-copy { padding: 0; }
+      .hero h1 { max-width: 600px; margin-top: 17px; font-size: clamp(2.3rem, 11.5vw, 3.35rem); line-height: 1.02; }
+      .hero-lead { max-width: 560px; font-size: .98rem; line-height: 1.65; }
+      .hero-points { gap: 9px 15px; font-size: .73rem; }
+      .visual-wrap { display: flex; min-height: 0; flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 11px; padding-bottom: 43px; }
+      .orb { top: 10%; right: 12%; width: min(75vw, 340px); }
+      .phone-card { width: min(100%, 420px); align-self: center; transform: none; }
+      .float-tag.top { position: relative; top: auto; right: auto; align-self: flex-end; }
+      .float-tag.bottom { bottom: 0; left: 0; }
+      .trust-inner { grid-template-columns: 1fr; padding: 8px 0; }
+      .trust-item { min-height: 44px; justify-content: flex-start; padding: 0 9px; text-align: left; }
+      .trust-item + .trust-item { border-top: 1px solid rgba(255,255,255,.07); border-left: 0; }
+      .section-heading { display: block; margin-bottom: 25px; }
+      .section-heading h2 { font-size: clamp(2.1rem, 9vw, 2.8rem); }
+      .section-heading p { font-size: .92rem; }
+      .section-note { max-width: none; margin-top: 17px; }
+      .service-grid, .plans-grid { grid-template-columns: 1fr; }
+      .plans-grid .plan-card:nth-child(3) { grid-column: auto; }
+      .service-card { height: auto; padding: 20px; border-radius: 21px; }
+      .service-card .card-cta { min-height: 44px; padding-top: 14px; }
+      .plan-card { height: auto; padding: 21px; }
+      .plan-card .button { margin-top: 18px; }
+      .plans-foot { line-height: 1.6; }
+      .process-grid { grid-template-columns: 1fr; gap: 10px; }
+      .step-card { height: auto; padding: 19px 17px; }
+      .step-card h3 { margin-top: 14px; }
+      .contact-panel { grid-template-columns: 1fr; gap: 22px; border-radius: 23px; }
+      .contact-panel h2 { font-size: clamp(2.3rem, 9.5vw, 3.2rem); }
+      .contact-panel p { font-size: .92rem; }
+      .footer-inner { align-items: flex-start; flex-direction: column; gap: 14px; }
+    }
+    @media (max-width: 390px) {
+      .wrap { width: calc(100% - 28px); }
+      .brand-copy small { letter-spacing: .04em; }
+      .nav > .button { padding-inline: 10px; }
+      .hero h1 { font-size: clamp(2.25rem, 11.5vw, 2.7rem); }
+      .hero-actions .button { width: 100%; }
+      .service-top { gap: 9px; }
+      .price { padding: 7px 9px; font-size: .69rem; }
+      .service-card h3 { font-size: 1.16rem; }
+      .service-card ul { gap: 7px; font-size: .78rem; }
+      .float-tag { padding: 9px 11px; font-size: .68rem; }
+    }
+    @media (max-width: 350px) {
+      .nav-links { font-size: .68rem; }
+      .brand-copy strong { font-size: .72rem; }
+      .hero-actions .button { padding-inline: 12px; font-size: .78rem; }
+      .product-mini { gap: 8px; padding: 9px; }
+      .product-art { width: 45px; height: 45px; flex-basis: 45px; }
+      .product-price { font-size: .63rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav wrap" aria-label="Navegación principal">
+      <a class="brand" href="#inicio" aria-label="Juan Felipe Rentería, inicio">
+        <span class="brand-mark" aria-hidden="true">JF</span>
+        <span class="brand-copy"><strong>Juan Felipe Rentería</strong><small>Automatización con IA</small></span>
+      </a>
+      <div class="nav-links">
+        <a href="#servicios">Servicios</a>
+        <a href="#planes">Planes</a>
+        <a href="#proceso">Cómo trabajamos</a>
+      </div>
+      <a class="button" href="https://wa.me/573195082135?text=Hola%2C%20Juan%20Felipe.%20Quiero%20automatizar%20mi%20tienda." target="_blank" rel="noopener noreferrer" aria-label="Escribir por WhatsApp">
+        Hablemos<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 11.7a8 8 0 0 1-11.8 7l-4.2 1.1 1.1-4.1A8 8 0 1 1 20 11.7Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.8 8.3c.2-.4.4-.4.7-.4h.4c.2 0 .3.1.4.4l.6 1.4c.1.2.1.3 0 .5l-.5.6c-.2.2-.2.3-.1.5.4.7 1 1.4 1.7 1.8.2.1.4.1.5-.1l.7-.8c.2-.2.3-.2.5-.1l1.4.7c.2.1.3.2.3.4 0 .3-.1.9-.6 1.2-.4.4-1 .5-1.6.3-.6-.1-1.4-.5-2.4-1.4-.8-.7-1.5-1.7-1.9-2.6-.4-.8-.1-1.8.2-2.2Z" fill="currentColor"/></svg>
+      </a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-grid wrap">
+        <div class="hero-copy">
+          <span class="eyebrow">IA aplicada a tiendas online</span>
+          <h1 class="serif">Tu tienda vende.<br><span class="accent">La IA sigue.</span></h1>
+          <p class="hero-lead">Conecto tu tienda online, WhatsApp y tus pedidos para que la atención y las tareas repetitivas sigan funcionando, incluso cuando no estás frente al computador.</p>
+          <div class="hero-actions">
+            <a class="button" href="https://wa.me/573195082135?text=Hola%2C%20Juan%20Felipe.%20Quiero%20revisar%20que%20puedo%20automatizar%20en%20mi%20negocio." target="_blank" rel="noopener noreferrer">
+              Cuéntame de tu tienda
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a class="button secondary" href="#servicios">Ver servicios</a>
+          </div>
+          <div class="hero-points" aria-label="Características del servicio">
+            <span><i class="check" aria-hidden="true">✓</i> Atención 24/7</span>
+            <span><i class="check" aria-hidden="true">✓</i> WhatsApp + tienda + POS</span>
+            <span><i class="check" aria-hidden="true">✓</i> Implementación a medida</span>
+          </div>
+        </div>
+
+        <div class="visual-wrap" aria-label="Ejemplo ilustrativo de una automatización de pedidos por WhatsApp">
+          <div class="orb" aria-hidden="true"></div>
+          <div class="float-tag top glass"><i class="live-dot" aria-hidden="true"></i> Asistente disponible 24/7</div>
+          <div class="phone-card glass">
+            <div class="phone-top">
+              <div class="phone-person"><span class="avatar">JF</span><span><b>Asistente de tienda</b><small>WhatsApp · conectado</small></span></div>
+              <span class="phone-dots" aria-hidden="true">•••</span>
+            </div>
+            <div class="flow-label">Así puede fluir un pedido</div>
+            <div class="chat">
+              <div class="bubble">Hola, ¿tienen disponible el kit de cuidado?</div>
+              <div class="bubble outgoing">¡Hola! Sí, está disponible. Te comparto los detalles:</div>
+            </div>
+            <div class="product-mini">
+              <div class="product-art" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M8 4h8l1 4-1 12H8L7 8l1-4Z" stroke="currentColor" stroke-width="1.4"/><path d="M9 4V2h6v2M7.5 9h9M10 12h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></div>
+              <div class="product-copy"><strong>Kit de cuidado esencial</strong><small>Disponible · envío o recogida</small></div>
+              <span class="product-price">Ver precio</span>
+            </div>
+            <div class="automation-state"><span><i class="live-dot" aria-hidden="true"></i> Pedido conectado con la tienda</span><b>EN CURSO</b></div>
+            <p class="phone-caption">Una demostración visual de un flujo posible para tu negocio.</p>
+          </div>
+          <div class="float-tag bottom glass"><span class="tag-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="15" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 3v4m8-4v4M4 10h16m-11 4h2m3 0h2m-7 3h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span> Web <span class="link-arrow">↔</span> WhatsApp <span class="link-arrow">↔</span> POS</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="trust-strip">
+      <div class="trust-inner wrap">
+        <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v3m0 12v3M4.9 4.9 7 7m10 10 2.1 2.1M3 12h3m12 0h3M4.9 19.1 7 17m10-10 2.1-2.1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.7"/></svg>Atención inmediata para tus clientes</div>
+        <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M6 4h12a2 2 0 0 1 2 2v12H4V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="m8 13 2.5 2.5L16 10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Menos pedidos procesados a mano</div>
+        <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21V5.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M4 17a2.5 2.5 0 0 1 2.5-2.5H20M8 7h8m-8 3h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Tu negocio, fácil de encontrar y comprar</div>
+      </div>
+    </div>
+
+    <section class="content-section" id="servicios">
+      <div class="wrap">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">Servicios de pago único</span>
+            <h2 class="serif">Una base digital que trabaja contigo.</h2>
+            <p>Desde una presencia online profesional hasta un flujo completo de pedidos conectado con WhatsApp y tu punto de venta.</p>
+          </div>
+          <div class="section-note">Cada proyecto comienza entendiendo cómo funciona tu negocio y qué conviene automatizar.</div>
+        </div>
+
+        <div class="service-grid">
+          <article class="service-card glass">
+            <div class="service-top"><span class="service-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="4" width="17" height="16" rx="2.3" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 8h17m-12 5h3m-3 3h7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="price">$600.000 – $1.000.000</span></div>
+            <h3>Página web o catálogo</h3>
+            <p>Tu negocio con una presencia online clara y profesional.</p>
+            <ul><li>Inicio, catálogo, sobre nosotros, contacto y ubicación</li><li>Productos con foto, descripción y precio</li><li>Botón directo a WhatsApp y dominio propio</li><li>SEO local simple en Google</li></ul>
+            <a class="card-cta" href="https://wa.me/573195082135?text=Hola%2C%20me%20interesa%20una%20pagina%20web%20o%20catalogo." target="_blank" rel="noopener noreferrer">Hablemos de tu web <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </article>
+
+          <article class="service-card glass">
+            <div class="service-top"><span class="service-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v14H4zM8 9h8m-8 3h5m-8 7 2.5-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="17" cy="15" r="2.2" stroke="currentColor" stroke-width="1.5"/></svg></span><span class="price">$1.500.000 – $2.500.000</span></div>
+            <h3>Ecommerce completo</h3>
+            <p>Una tienda propia para mostrar, cobrar y gestionar tus ventas.</p>
+            <ul><li>Página web con carrito y checkout</li><li>Configuración de pasarela de pagos</li><li>Domicilios, envíos o recogida en tienda</li><li>Panel de administración y capacitación</li></ul>
+            <a class="card-cta" href="https://wa.me/573195082135?text=Hola%2C%20me%20interesa%20crear%20un%20ecommerce%20completo." target="_blank" rel="noopener noreferrer">Crear mi tienda online <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </article>
+
+          <article class="service-card glass featured">
+            <div class="service-top"><span class="service-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7h4V3m10 14h-4v4M7 7a7 7 0 0 1 11-1l1 1M17 17a7 7 0 0 1-11 1l-1-1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 12h14" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 3"/></svg></span><span class="price">$800.000 – $3.500.000</span></div>
+            <h3>Sistema de pedidos propio</h3>
+            <p>Tu web, WhatsApp y punto de venta conectados para que los pedidos fluyan.</p>
+            <ul><li>Automatización de procesos con n8n</li><li>Notificación de pedido nuevo y confirmación al cliente</li><li>Conexión con tu POS</li><li>Flujo para actualizar el estado del pedido</li></ul>
+            <a class="card-cta" href="https://wa.me/573195082135?text=Hola%2C%20quiero%20conectar%20mis%20pedidos%20con%20WhatsApp%20y%20mi%20POS." target="_blank" rel="noopener noreferrer">Conectar mis pedidos <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </article>
+
+          <article class="service-card glass">
+            <div class="service-top"><span class="service-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v14H6.5A2.5 2.5 0 0 0 4 19.5v-14Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 7h8m-8 3h6m-9 7a2.5 2.5 0 0 1 2.5-2.5H20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="m15.5 5 .5 1 .9.5-1 .5-.4 1-.5-1-1-.5 1-.5.5-1Z" fill="currentColor"/></svg></span><span class="price">$500.000 – $1.500.000</span></div>
+            <h3>Chatbot con inteligencia artificial</h3>
+            <p>Un asistente configurado con la información y el tono de tu negocio.</p>
+            <ul><li>Flujo de conversación para preguntas frecuentes y ayuda</li><li>Entrenamiento con información de tu negocio</li><li>Conexión a WhatsApp o Instagram</li><li>Pruebas y ajuste del tono</li></ul>
+            <a class="card-cta" href="https://wa.me/573195082135?text=Hola%2C%20quiero%20un%20asistente%20de%20IA%20para%20mi%20negocio." target="_blank" rel="noopener noreferrer">Diseñar mi asistente <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section plans-section" id="planes">
+      <div class="wrap">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">Servicios de pago mensual</span>
+            <h2 class="serif">Tu tienda sigue activa. Y mejorando.</h2>
+            <p>Opciones de acompañamiento para mantener tu web, tus automatizaciones y tu atención en marcha mes a mes.</p>
+          </div>
+          <div class="section-note">Elige el nivel de soporte que se ajusta a tu operación. Podemos revisar cuál tiene sentido para tu tienda.</div>
+        </div>
+        <div class="plans-grid">
+          <article class="plan-card glass">
+            <h3>Mantenimiento básico</h3>
+            <div class="plan-price">$150.000 <small>/ mes</small></div>
+            <ul><li>Dominio y web activos</li><li>Cambios pequeños en precios, fotos o textos</li><li>Soporte por WhatsApp</li><li>Reporte mensual simple</li></ul>
+            <a class="button secondary" href="https://wa.me/573195082135?text=Hola%2C%20me%20interesa%20el%20mantenimiento%20basico%20mensual." target="_blank" rel="noopener noreferrer">Consultar este plan</a>
+          </article>
+          <article class="plan-card glass">
+            <h3>Mantenimiento + automatización</h3>
+            <div class="plan-price">$200.000 – $400.000 <small>/ mes</small></div>
+            <ul><li>Mejoras activas al chatbot</li><li>Monitoreo del asistente</li><li>Revisión de conexión con el POS</li><li>Ajustes a preguntas frecuentes</li></ul>
+            <a class="button secondary" href="https://wa.me/573195082135?text=Hola%2C%20me%20interesa%20el%20plan%20de%20mantenimiento%20y%20automatizacion." target="_blank" rel="noopener noreferrer">Consultar este plan</a>
+          </article>
+          <article class="plan-card glass">
+            <h3>Crecimiento</h3>
+            <div class="plan-price">Desde $300.000 <small>/ mes</small></div>
+            <ul><li>Campañas automáticas por WhatsApp</li><li>Sugerencias mensuales</li><li>Prioridad en tiempo de respuesta</li></ul>
+            <a class="button secondary" href="https://wa.me/573195082135?text=Hola%2C%20quiero%20conocer%20el%20plan%20mensual%20de%20crecimiento." target="_blank" rel="noopener noreferrer">Consultar este plan</a>
+          </article>
+        </div>
+        <p class="plans-foot">Valores en pesos colombianos. El alcance y el valor final se definen según las necesidades de cada negocio.</p>
+      </div>
+    </section>
+
+    <section class="content-section" id="proceso">
+      <div class="wrap">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">Cómo trabajamos juntos</span>
+            <h2 class="serif">Claro desde la primera conversación.</h2>
+            <p>Un proceso sencillo para entender tu operación, definir el alcance y dejar todo probado antes de salir en vivo.</p>
+          </div>
+        </div>
+        <div class="process-grid">
+          <article class="step-card glass"><span class="step-number">01</span><h3>Diagnóstico</h3><p>Reviso tu negocio y detecto qué tareas se pueden automatizar.</p></article>
+          <article class="step-card glass"><span class="step-number">02</span><h3>Propuesta</h3><p>Definimos qué se va a hacer y cuánto cuesta, sin sorpresas.</p></article>
+          <article class="step-card glass"><span class="step-number">03</span><h3>Implementación</h3><p>Construyo y pruebo el flujo antes de ponerlo en marcha.</p></article>
+          <article class="step-card glass"><span class="step-number">04</span><h3>Acompañamiento</h3><p>Hacemos seguimiento y ajustes para que siga funcionando bien.</p></article>
+        </div>
+        <div class="process-note glass"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m12 3 2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="m19 15 1.1 2.9L23 19l-2.9 1.1L19 23l-1.1-2.9L15 19l2.9-1.1L19 15Z" fill="currentColor"/></svg><span>Un asistente que responde con la información de tu negocio, disponible cuando tus clientes escriben.</span></div>
+      </div>
+    </section>
+
+    <section class="content-section contact-section" id="contacto">
+      <div class="wrap">
+        <div class="contact-panel glass">
+          <div>
+            <span class="eyebrow">Hablemos de tu tienda</span>
+            <h2 class="serif">¿Qué te gustaría dejar de hacer a mano?</h2>
+            <p>Cuéntame cómo funciona tu negocio hoy. Revisamos qué se puede automatizar y qué solución te conviene.</p>
+          </div>
+          <div class="contact-actions">
+            <a class="button" href="https://wa.me/573195082135?text=Hola%2C%20Juan%20Felipe.%20Quiero%20contarte%20como%20funciona%20mi%20tienda." target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 11.7a8 8 0 0 1-11.8 7l-4.2 1.1 1.1-4.1A8 8 0 1 1 20 11.7Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.8 8.3c.2-.4.4-.4.7-.4h.4c.2 0 .3.1.4.4l.6 1.4c.1.2.1.3 0 .5l-.5.6c-.2.2-.2.3-.1.5.4.7 1 1.4 1.7 1.8.2.1.4.1.5-.1l.7-.8c.2-.2.3-.2.5-.1l1.4.7c.2.1.3.2.3.4 0 .3-.1.9-.6 1.2-.4.4-1 .5-1.6.3-.6-.1-1.4-.5-2.4-1.4-.8-.7-1.5-1.7-1.9-2.6-.4-.8-.1-1.8.2-2.2Z" fill="currentColor"/></svg>
+              Escribir por WhatsApp
+            </a>
+            <span class="contact-number">+57 319 508 2135</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner wrap">
+      <a class="footer-brand" href="#inicio"><span class="brand-mark" aria-hidden="true">JF</span> Juan Felipe Rentería</a>
+      <span>Automatización con IA para ecommerce · Colombia</span>
+      <a class="footer-link" href="https://wa.me/573195082135" target="_blank" rel="noopener noreferrer">WhatsApp +57 319 508 2135</a>
+    </div>
+  </footer>
+</body>
+</html>
